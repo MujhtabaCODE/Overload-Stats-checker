@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OVERLOAD</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand">OVER<span>LOAD</span></div>
+      <div class="tagline">Training &amp; consistency, in one place</div>
+    </div>
+    <div class="tabbar">
+      <button class="tab-btn active" id="tabBtnGym">TRAINING LOG</button>
+      <button class="tab-btn" id="tabBtnHab">CONSISTENCY</button>
+    </div>
+  </header>
+
+  <div class="tab-panel active" id="tabGym">
+    <div class="panel-strip">
+      <div></div>
+      <div class="session-stat"><div class="num" id="gym-totalSets">0</div><div class="lbl">Sets logged</div></div>
+    </div>
+    <div class="grid">
+      <div>
+        <div class="exlist" id="gym-exList"></div>
+        <div class="add-ex">
+          <div class="add-row">
+            <input type="text" id="gym-newExName" placeholder="Add exercise...">
+            <button id="gym-addExBtn">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" id="gym-curExName">—</div>
+        <div class="panel-sub" id="gym-curExMeta" style="margin-bottom:20px;">SELECT AN EXERCISE TO BEGIN</div>
+
+        <div class="barbell-zone">
+          <div class="barbell-label">Bar Load Preview</div>
+          <svg id="gym-barbellSvg" viewBox="0 0 600 90"></svg>
+        </div>
+
+        <div class="entry-row">
+          <div class="field"><label>Weight (kg)</label><input type="number" id="gym-inWeight" placeholder="0" step="0.5"></div>
+          <div class="field"><label>Reps</label><input type="number" id="gym-inReps" placeholder="0"></div>
+          <div class="field"><label>Sets</label><input type="number" id="gym-inSets" placeholder="1" value="1"></div>
+          <button class="log-btn" id="gym-logBtn">LOG SET</button>
+        </div>
+
+        <div class="chart-wrap">
+          <svg id="gym-chartSvg" class="line-chart" viewBox="0 0 700 200" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gymAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e8952e" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#e8952e" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="insight-grid">
+          <div class="insight-zone">
+            <div class="insight-label">Volume by Session</div>
+            <svg id="gym-barSvg" class="bar-chart" viewBox="0 0 400 160"></svg>
+          </div>
+          <div class="insight-zone">
+            <div class="insight-label">Increase in Load</div>
+            <svg id="gym-pieSvg" class="pie-chart" viewBox="0 0 200 160"></svg>
+          </div>
+        </div>
+
+        <div class="history">
+          <table>
+            <thead><tr><th>Date</th><th>Weight</th><th>Reps</th><th>Sets</th><th>Volume</th></tr></thead>
+            <tbody id="gym-historyBody"></tbody>
+          </table>
+          <div class="empty-state" id="gym-emptyState" style="display:none;">No sets logged yet — enter a weight and rep count above and hit LOG SET.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tabHab">
+    <div class="panel-strip">
+      <div class="header-actions">
+        <button class="ghost-btn" id="hab-exportBtn">EXPORT DATA</button>
+        <button class="ghost-btn" id="hab-importBtn">IMPORT DATA</button>
+        <input type="file" id="hab-fileImport" accept="application/json">
+      </div>
+      <div class="session-stat"><div class="num" id="hab-totalCheckins">0</div><div class="lbl">Total check-ins</div></div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="exlist" id="hab-exList"></div>
+        <div class="add-ex">
+          <div class="add-row">
+            <input type="text" id="hab-newExName" placeholder="Habit name...">
+            <button id="hab-addExBtn">+</button>
+          </div>
+          <input type="text" id="hab-newExUnit" placeholder="Metric unit (optional, e.g. pages, mins)">
+          <div class="add-hint">Metric unit lets you track a number each day — leave blank for a simple checklist item.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-top">
+          <div>
+            <div class="panel-title" id="hab-curExName">—</div>
+            <div class="panel-sub" id="hab-curExMeta">SELECT A HABIT TO BEGIN</div>
+          </div>
+          <button class="today-btn" id="hab-todayBtn">MARK TODAY DONE</button>
+        </div>
+
+        <div class="streak-row">
+          <div class="streak-card"><div class="num" id="hab-curStreak">0</div><div class="lbl">Current streak</div></div>
+          <div class="streak-card"><div class="num" id="hab-bestStreak">0</div><div class="lbl">Best streak</div></div>
+          <div class="streak-card"><div class="num" id="hab-rate30">0%</div><div class="lbl">Last 30 days</div></div>
+        </div>
+
+        <div class="heatmap-zone">
+          <div class="heatmap-label">Last 13 weeks</div>
+          <svg id="hab-heatmapSvg" viewBox="0 0 780 110"></svg>
+        </div>
+
+        <div id="hab-metricSection">
+          <div class="metric-row">
+            <div class="field"><label id="hab-metricInputLabel">Value</label><input type="number" id="hab-inMetric" step="any" placeholder="0"></div>
+            <button class="log-btn" id="hab-logMetricBtn">LOG</button>
+          </div>
+
+          <div class="chart-wrap">
+            <svg id="hab-chartSvg" class="line-chart" viewBox="0 0 700 180" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="habAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#e8952e" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#e8952e" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="insight-grid">
+            <div class="insight-zone">
+              <div class="insight-label">Progress by Session</div>
+              <svg id="hab-barSvg" class="bar-chart" viewBox="0 0 400 160"></svg>
+            </div>
+            <div class="insight-zone">
+              <div class="insight-label">Increase in Load</div>
+              <svg id="hab-pieSvg" class="pie-chart" viewBox="0 0 200 160"></svg>
+            </div>
+          </div>
+
+          <div class="history">
+            <table>
+              <thead><tr><th>Date</th><th id="hab-metricColHead">Value</th></tr></thead>
+              <tbody id="hab-historyBody"></tbody>
+            </table>
+            <div class="empty-state" id="hab-emptyState" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="no-metric-note" id="hab-noMetricNote" style="display:none;">This habit is tracked as a simple checklist — no numeric metric attached.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
